@@ -8,7 +8,9 @@ This edition uses **English keys only**.
 
 ```text
 {
-  Responsibility: Get user information
+  Responsibility: [
+    GetUser: Get user information
+  ]
   Action: [
     1: Validate the user ID
     2: Fetch the user from the repository
