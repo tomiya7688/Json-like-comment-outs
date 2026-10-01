@@ -1,5 +1,6 @@
 # XML ↔ JSON-like Converter
 
+**まだできてないよ...**
 **Status: Planned — まだ実装されていません。**
 
 XML Documentation コメントと JSON-like Comment Outs を相互変換するツールです。
