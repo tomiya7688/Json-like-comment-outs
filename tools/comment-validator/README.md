@@ -1,5 +1,6 @@
 # Comment Validator / コメント検証ツール
 
+**まだできてないよ...**
 **Status: Planned — まだ実装されていません。**
 
 JSON-like Comment Outs の不足や、コメントと実装の**機械的に確認できる不一致**を検出するツールです。
