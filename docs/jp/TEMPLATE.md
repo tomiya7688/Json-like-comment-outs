@@ -42,7 +42,9 @@
 
 ```text
 {
-  責務:
+  責務: [
+    FunctionName:
+  ]
   処理: [
     1:
     2:
@@ -63,7 +65,9 @@
 
 ```text
 {
-  Responsibility:
+  Responsibility: [
+    ClassName:
+  ]
   Fields: [
     fieldName:
   ]
@@ -77,7 +81,9 @@
 
 ```text
 {
-  Responsibility:
+  Responsibility: [
+    FunctionName:
+  ]
   Action: [
     1:
     2:
