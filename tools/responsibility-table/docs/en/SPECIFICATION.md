@@ -20,6 +20,18 @@ Basic output:
 
 The tool does not infer responsibilities. It reads Semantic Keys from comments.
 
+The tool is designed to analyze **comments only**. Declaration names are also read from the Responsibility entry.
+
+Recommended form:
+
+```text
+Responsibility: [
+  UserService: Manage user information
+]
+```
+
+This allows the tool to generate the table without parsing the code declaration itself.
+
 ## 2. Interfaces
 
 ### GUI
@@ -118,6 +130,16 @@ Configuration file name, location, and Global / Project precedence are not decid
 ## 8. Responsibility Extraction
 
 The tool uses values resolved to the canonical `Responsibility` key.
+
+Inside Responsibility, the tool reads `name: responsibility` pairs.
+
+```text
+Responsibility: [
+  UserService: Manage user information
+]
+```
+
+`UserService` becomes the name column and the value becomes the responsibility column.
 
 By default, it should not:
 
