@@ -46,17 +46,6 @@ JSON-like Comment Outs は、クラス・関数・メソッドの宣言直前に
 
 どちらも、責務・処理・入力・出力という同じ意味を持つ構造として扱います。
 
-ツールでは、必要に応じて `SemanticKeys` 設定で alias を共通の意味へ対応付けます。比較は大文字小文字を区別せず、ツール側で勝手な類義語推測は行いません。
-
-```json
-{
-  "SemanticKeys": {
-    "Responsibility": ["責務", "役割", "Responsible"],
-    "Action": ["処理", "手順"]
-  }
-}
-```
-
 > **構造は共有する。言語はチームに合わせる。**
 
 ## Why
@@ -102,6 +91,12 @@ English documentation is a translation and uses **English JSON-like keys only**.
 - [English documentation](./docs/en/README.md)
 - [Specification](./docs/en/SPECIFICATION.md)
 - [Templates](./docs/en/TEMPLATE.md)
+
+## Tools
+
+サポートツールは [tools](./tools/README.md) 以下で設計・管理します。
+
+最初の候補は [責務表生成ツール](./tools/responsibility-table/README.md) です。
 
 ## License
 
