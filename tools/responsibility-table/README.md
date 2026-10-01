@@ -1,5 +1,6 @@
 # Responsibility Table
 
+**まだできてないよ...**
 JSON-like Comment Outs から責務を抽出し、Markdown の責務表を生成するサポートツールです。
 
 **Status: Design Draft — 未実装**
