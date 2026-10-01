@@ -2,7 +2,22 @@
 
 コピーして利用するための基本テンプレートです。
 
+ルールは **必須 / 推奨 / 任意** に分かれています。詳細は [SPECIFICATION.md](./SPECIFICATION.md) を参照してください。
+
 ## Class
+
+### 必須
+
+```text
+{
+  Responsibility: 
+  Fields: [
+    fieldName: 
+  ]
+}
+```
+
+### 推奨を含む基本形
 
 ```text
 {
@@ -17,6 +32,8 @@
 ```
 
 ## Function / Method
+
+### 必須基本形
 
 ```text
 {
@@ -34,7 +51,7 @@
 }
 ```
 
-## Function / Method - Full
+### 任意項目を含む Full
 
 副作用やエラーも重要な場合:
 
@@ -65,6 +82,8 @@
 
 ## TypeScript / JavaScript Example
 
+関数・メソッド内部では、Action に対応する処理単位へ通常コメントを付けることを推奨します。
+
 ```ts
 /*
 {
@@ -87,7 +106,17 @@
 }
 */
 function getUser(userId) {
-  // ...
+  // userIdの妥当性を確認する
+  validateUserId(userId);
+
+  // Repositoryから対象ユーザーを取得する
+  const user = repository.find(userId);
+
+  // 取得結果を返却形式へ変換する
+  const response = toUserResponse(user);
+
+  // 呼び出し元へユーザー情報を返す
+  return response;
 }
 ```
 
@@ -110,7 +139,22 @@ function getUser(userId) {
 }
 */
 class AuthManager {
-  // ...
+  login(credentials) {
+    // 認証APIへログイン情報を送信する
+    const result = authenticate(credentials);
+
+    // 認証成功時の状態を保持する
+    this.token = result.token;
+    this.user = result.user;
+    this.isAuthenticated = true;
+  }
+
+  logout() {
+    // 保持している認証状態を破棄する
+    this.token = null;
+    this.user = null;
+    this.isAuthenticated = false;
+  }
 }
 ```
 
@@ -134,7 +178,14 @@ Python では行コメントとして記述できます。
 #   ]
 # }
 def get_user(user_id):
-    pass
+    # user_idの妥当性を確認する
+    validate_user_id(user_id)
+
+    # Repositoryから対象ユーザーを取得する
+    user = repository.find(user_id)
+
+    # 呼び出し元へユーザー情報を返す
+    return user
 ```
 
 ## Empty Param / Return
@@ -151,21 +202,25 @@ Param: []
 Return: []
 ```
 
-## Minimal Class
+## Comment Layers
 
-Action を書く必要がない単純なクラスでは、次の形まで縮められます。
+推奨する考え方:
 
 ```text
-{
-  Responsibility: 
-  Fields: [
-    fieldName: 
-  ]
-}
+JSON-like Comment Out
+  └─ クラス・関数全体の責務や処理フロー
+
+通常コメント
+  └─ 関数・メソッド内部の具体的な処理単位
 ```
+
+JSON-like Comment Out だけですべての実装詳細を説明しようとせず、通常コメントと役割を分担してください。
 
 ## Notes
 
-- 空欄の任意項目は削除してください。
+- 必須項目は原則として省略しません。
+- 推奨項目・推奨ルールは、合理的な理由がなければ採用します。
+- 任意項目は必要な場合だけ追加します。
 - Action は実装の逐語訳ではなく、処理の目的と流れを書いてください。
-- テンプレートを埋めること自体を目的にせず、コード理解に必要な情報だけを残してください。
+- 関数・メソッド内部では、意味のある処理単位に通常コメントを付けることを推奨します。
+- テンプレートを埋めること自体を目的にせず、コード理解に必要な情報を残してください。
