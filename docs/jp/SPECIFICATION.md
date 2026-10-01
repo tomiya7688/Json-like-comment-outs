@@ -103,49 +103,6 @@ JSON-like Comment Outs として基本的に満たすルールです。
 
 **構造は共有し、言語はチームに合わせる**ことを基本とします。
 
-### SemanticKeys 設定
-
-ツールが異なるキー名を同じ意味として扱う場合は、`SemanticKeys` 設定に従います。
-
-設定は複雑にせず、**canonical key と alias の配列**だけを持ちます。
-
-```json
-{
-  "SemanticKeys": {
-    "Responsibility": ["責務", "役割", "Responsible"],
-    "Action": ["処理", "手順"],
-    "Fields": ["フィールド", "状態"],
-    "Param": ["引数", "入力"],
-    "Return": ["戻り値", "出力"],
-    "SideEffect": ["副作用"],
-    "Error": ["エラー"],
-    "Note": ["補足"]
-  }
-}
-```
-
-#### ルール
-
-- `SemanticKeys` の canonical key と alias は**大文字小文字を区別しない**
-- canonical key 自身は alias 配列に書かなくても自動的に有効
-- alias は翻訳語である必要はなく、チームが同じ意味として扱いたい任意の文字列を登録できる
-- ツールは `SemanticKeys` に従って意味を解決し、類義語の推測や曖昧一致は行わない
-- 同じ alias を複数の canonical key に割り当ててはならない
-- 設定されていないキーは、既知の Semantic Key としては扱わない
-
-例として、次はすべて `Responsibility` として解決されます。
-
-```text
-Responsibility
-responsibility
-RESPONSIBILITY
-責務
-役割
-Responsible
-```
-
-この仕組みにより、人間が読むコメントではチームの語彙を使い、ツール内部では共通の Semantic Key に正規化できます。
-
 ## 6. 基本構文
 
 ```text
@@ -339,10 +296,13 @@ const total = calculateTotal(order);
 
 ## 12. Tooling
 
+ツール固有の設定・挙動は、コア仕様ではなく各ツールの docs で定義します。
+
 将来的には次のようなツールを実装できます。
 
 - JSON-like Comment Out の検証
-- プロジェクト固有の Semantic Key マッピング
 - XML Documentation への変換
 - Markdown / HTML ドキュメント生成
 - AI向けコードコンテキスト抽出
+
+責務表生成ツールの設計は [tools/responsibility-table](../../tools/responsibility-table/README.md) を参照してください。
