@@ -1,6 +1,6 @@
 # JSON-like Comment Outs Specification
 
-Status: **Draft v0.6**
+Status: **Draft v0.7**
 
 > This English edition is a translation. The Japanese specification is canonical.
 
@@ -76,6 +76,44 @@ For this English edition, the recommended vocabulary is:
 - Use the same vocabulary consistently within a project
 - Prefer terms the team understands immediately
 - Fix the project vocabulary when tooling such as linting or documentation generation depends on stable keys
+
+### SemanticKeys Configuration
+
+Tools resolve equivalent keys through a simple `SemanticKeys` mapping.
+
+```json
+{
+  "SemanticKeys": {
+    "Responsibility": ["Role", "Responsible"],
+    "Action": ["Actions", "Steps"],
+    "Fields": ["State"],
+    "Param": ["Parameter", "Parameters", "Input"],
+    "Return": ["Returns", "Output"],
+    "SideEffect": ["SideEffects"],
+    "Error": ["Errors"],
+    "Note": ["Notes"]
+  }
+}
+```
+
+Rules:
+
+- Canonical keys and aliases are **case-insensitive**
+- A canonical key is recognized automatically and does not need to appear in its alias list
+- Aliases do not need to be strict synonyms; they are project-defined equivalent keys
+- Tools follow `SemanticKeys` exactly and do not perform fuzzy or synonym inference
+- The same alias must not map to multiple canonical keys
+- An unmapped key is not treated as a known Semantic Key
+
+For example, all of the following resolve to `Responsibility` when configured accordingly:
+
+```text
+Responsibility
+responsibility
+RESPONSIBILITY
+Role
+Responsible
+```
 
 ## 6. Basic Syntax
 
