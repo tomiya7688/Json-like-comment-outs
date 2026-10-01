@@ -2,239 +2,95 @@
 
 **XMLドキュメントコメントより、書きやすく・読みやすい構造化コメントを目指す実験的なコメント方式です。**
 
-クラス・関数・メソッドの宣言直前に、JSON風の構造を持つコメントを書きます。
+JSON-like Comment Outs は、クラス・関数・メソッドの宣言直前に JSON風の構造を持つコメントを書きます。
 
-> この記法は JSON そのものではありません。  
-> XMLドキュメントコメントとの完全互換も目的としていません。
+重要なのは固定された英語キーではなく、**Key が持つ共通の意味 (Semantic Key)** です。
+
+そのため、コメントはコードを読むチームが最も読みやすい言語で書くことを推奨します。
+
+## 日本語の例
+
+```text
+{
+  責務: ユーザー情報を取得する
+  処理: [
+    1: IDを検証する
+    2: Repositoryから取得する
+  ]
+  引数: [
+    userId: 対象ユーザーID
+  ]
+  戻り値: [
+    user: ユーザー情報
+  ]
+}
+```
+
+## English example
+
+```text
+{
+  Responsibility: Get user information
+  Action: [
+    1: Validate the user ID
+    2: Fetch the user from the repository
+  ]
+  Param: [
+    userId: ID of the target user
+  ]
+  Return: [
+    user: User information
+  ]
+}
+```
+
+どちらも、責務・処理・入力・出力という同じ意味を持つ構造として扱います。
+
+> **構造は共有する。言語はチームに合わせる。**
 
 ## Why
 
-XMLドキュメントコメントは、IDEやドキュメント生成との連携に優れています。
+XML Documentation は IDE やドキュメント生成との連携に優れていますが、ソースコード上ではタグやマークアップの記述量が大きくなることがあります。
 
-一方で、ソースコード上ではタグが多くなりやすく、説明そのものよりマークアップの比率が大きくなる場合があります。
+JSON-like Comment Outs では、マークアップよりも**コードの意図を書くこと**へ集中できる形式を目指します。
 
-```csharp
-/// <summary>
-/// ユーザーIDからユーザー情報を取得する。
-/// </summary>
-/// <param name="userId">取得対象ユーザーのID。</param>
-/// <returns>取得したユーザー情報。</returns>
-User GetUser(string userId)
-```
-
-JSON-like Comment Outs では、同じ種類の情報を次のように表現できます。
-
-```text
-{
-  責務: ユーザーIDからユーザー情報を取得する
-  処理: [
-    1: userIdを検証する
-    2: Repositoryから対象ユーザーを取得する
-    3: 取得結果を返す
-  ]
-  引数: [
-    userId: 取得対象ユーザーのID
-  ]
-  戻り値: [
-    user: 取得したユーザー情報
-  ]
-}
-```
-
-このリポジトリでは、**マークアップを書くことより、コードの意図を書くことへ集中できる形式**を目指します。
-
-## Language
-
-**コメントは、そのコードを読むチームが最も読みやすい言語で書くことを推奨します。**
-
-説明文だけでなく、項目名もチームの言語に合わせて構いません。
-
-日本語チームなら:
-
-```text
-{
-  責務:
-  処理: []
-  引数: []
-  戻り値: []
-}
-```
-
-英語チームなら:
-
-```text
-{
-  Responsibility:
-  Action: []
-  Param: []
-  Return: []
-}
-```
-
-重要なのは英語のキー名を守ることではなく、**同じ意味の情報を、チームが素早く理解できる形で構造化すること**です。
-
-自動解析や生成ツールを利用するプロジェクトでは、プロジェクト内で使用する項目名を統一することを推奨します。
-
-## Goals
-
-- XML風のタグ構造より、ソース上で素早く読めること
-- コメントを書く際の記述量を抑えること
-- クラス・関数の責務、処理、入出力を一定の形で表現できること
-- チームが普段使う言語で読めること
-- 人間だけでなく、AIやツールからも構造を認識しやすいこと
-- コメント規約がコード本体より重くならないこと
-
-## Non-goals
-
-- 正式な JSON として解釈できること
-- XMLドキュメントコメントとの完全互換
-- IDEの IntelliSense やドキュメント生成機能をそのまま置き換えること
-- 英語の項目名を共通語として強制すること
-- ソースコード中のすべてのコメントを JSON風にすること
+厳密な JSON であることや、XML Documentation との完全互換は目的としていません。
 
 ## Scope
 
-JSON-like Comment Outs の対象は、主に**宣言レベルのドキュメントコメント**です。
+JSON-like Comment Out は主に宣言レベルで使用します。
 
-- クラス
-- 関数
-- メソッド
+- Class
+- Function
+- Method
 
-関数内部の処理説明やローカル変数の説明には、通常のコメントを使います。
+実装内部の処理単位・条件分岐・ローカル変数などは、通常コメントを使用します。
 
 ```ts
-function getUser(userId) {
-  // userIdの形式を検証する
-  validateUserId(userId);
-
-  // Repositoryから取得した未整形のユーザー情報
-  const user = repository.find(userId);
-
-  // API返却用の形式へ変換する
-  return toUserResponse(user);
-}
+// Repositoryから取得した未整形のユーザー情報
+const user = repository.find(userId);
 ```
 
-**JSON-like = 宣言前の構造化ドキュメント**  
-**通常コメント = 実装内部の説明**
+内部コメントまで JSON-like にする必要はありません。
 
-という役割分担を基本とします。
+## Documentation
 
-## Rule Levels
+### 日本語 — Canonical
 
-- **必須 (MUST)**: JSON-like Comment Outs として満たす基本ルール
-- **推奨 (SHOULD)**: 特別な理由がなければ採用するルール
-- **任意 (MAY)**: 必要な場合だけ利用する項目・書き方
+日本語ドキュメントを**正本 (canonical)** とします。  
+日本語キーと英語キーの両方を扱います。
 
-## Class
+- [日本語ドキュメント](./docs/jp/README.md)
+- [仕様](./docs/jp/SPECIFICATION.md)
+- [テンプレート](./docs/jp/TEMPLATE.md)
 
-日本語例:
+### English
 
-```text
-{
-  責務: このクラスが担当する責務
-  フィールド: [
-    fieldName: フィールドの意味・保持する状態
-  ]
-  処理: [
-    1: このクラスが提供する主な振る舞い
-    2: 別の主な振る舞い
-  ]
-}
-```
+English documentation is a translation and uses **English JSON-like keys only**.
 
-### 必須
-
-- 責務に相当する項目
-- フィールドに相当する項目
-
-### 推奨
-
-- 処理・振る舞いに相当する項目
-
-## Function / Method
-
-```text
-{
-  責務: この関数が担当する処理
-  処理: [
-    1: 入力を検証する
-    2: 必要なデータを取得する
-    3: 結果を組み立てる
-    4: 呼び出し元へ返す
-  ]
-  引数: [
-    name: 引数の意味
-  ]
-  戻り値: [
-    name: 戻り値の意味
-  ]
-}
-```
-
-### 必須
-
-- 責務に相当する項目
-- 処理に相当する項目
-- 引数に相当する項目
-- 戻り値に相当する項目
-
-## Internal Comments
-
-関数・メソッド内部では、**意味のある処理単位に通常コメントを付けることを推奨**します。
-
-変数名だけでは意味・由来・状態が分かりにくいローカル変数にも、必要に応じて通常コメントを付けます。
-
-内部コメントには特別な JSON-like 形式を要求しません。
-
-## Action / 処理
-
-処理項目はコードを逐語的に自然言語へ置き換えるためのものではありません。
-
-避けたい例:
-
-```text
-処理: [
-  1: iを0にする
-  2: for文を回す
-  3: resultへpushする
-]
-```
-
-推奨:
-
-```text
-処理: [
-  1: 対象データを順番に検証する
-  2: 条件を満たすデータを抽出する
-  3: 抽出結果を返却形式へ変換する
-]
-```
-
-**実装方法より、処理の目的・意味・流れを書く**ことを重視します。
-
-## Optional Fields
-
-必要に応じて、副作用・エラー・補足などの項目を追加できます。
-
-```text
-副作用: [
-  DBの状態を更新する
-]
-
-エラー: [
-  NotFound: 対象が存在しない
-]
-
-補足: [
-  この処理は冪等である
-]
-```
-
-## Documents
-
-- [Specification](./SPECIFICATION.md)
-- [Templates](./TEMPLATE.md)
+- [English documentation](./docs/en/README.md)
+- [Specification](./docs/en/SPECIFICATION.md)
+- [Templates](./docs/en/TEMPLATE.md)
 
 ## License
 
