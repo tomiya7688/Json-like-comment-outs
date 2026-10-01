@@ -77,44 +77,6 @@ For this English edition, the recommended vocabulary is:
 - Prefer terms the team understands immediately
 - Fix the project vocabulary when tooling such as linting or documentation generation depends on stable keys
 
-### SemanticKeys Configuration
-
-Tools resolve equivalent keys through a simple `SemanticKeys` mapping.
-
-```json
-{
-  "SemanticKeys": {
-    "Responsibility": ["Role", "Responsible"],
-    "Action": ["Actions", "Steps"],
-    "Fields": ["State"],
-    "Param": ["Parameter", "Parameters", "Input"],
-    "Return": ["Returns", "Output"],
-    "SideEffect": ["SideEffects"],
-    "Error": ["Errors"],
-    "Note": ["Notes"]
-  }
-}
-```
-
-Rules:
-
-- Canonical keys and aliases are **case-insensitive**
-- A canonical key is recognized automatically and does not need to appear in its alias list
-- Aliases do not need to be strict synonyms; they are project-defined equivalent keys
-- Tools follow `SemanticKeys` exactly and do not perform fuzzy or synonym inference
-- The same alias must not map to multiple canonical keys
-- An unmapped key is not treated as a known Semantic Key
-
-For example, all of the following resolve to `Responsibility` when configured accordingly:
-
-```text
-Responsibility
-responsibility
-RESPONSIBILITY
-Role
-Responsible
-```
-
 ## 6. Basic Syntax
 
 ```text
@@ -269,10 +231,13 @@ Prefer explaining purpose, reason, or meaning instead of simply restating the co
 
 ## 12. Tooling
 
+Tool-specific configuration and behavior are defined in each tool's own documentation rather than in the core specification.
+
 Potential future tooling includes:
 
 - Validation
-- Semantic-key mapping
 - XML Documentation conversion
 - Markdown / HTML generation
 - AI-oriented code-context extraction
+
+See the [Responsibility Table tool](../../tools/responsibility-table/README.md) for the current support-tool design.
