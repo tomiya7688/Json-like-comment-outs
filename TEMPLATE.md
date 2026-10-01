@@ -80,6 +80,19 @@
 }
 ```
 
+## Variable Comment
+
+意味のある状態・中間結果を保持するローカル変数では、次の形式を推奨します。
+
+```text
+{ Variable: variableName, Meaning: 変数が保持する値の意味・役割 }
+```
+
+```ts
+// { Variable: user, Meaning: Repositoryから取得した未整形のユーザー情報 }
+const user = repository.find(userId);
+```
+
 ## TypeScript / JavaScript Example
 
 関数・メソッド内部では、Action に対応する処理単位へ通常コメントを付けることを推奨します。
@@ -110,9 +123,11 @@ function getUser(userId) {
   validateUserId(userId);
 
   // Repositoryから対象ユーザーを取得する
+  // { Variable: user, Meaning: Repositoryから取得した未整形のユーザー情報 }
   const user = repository.find(userId);
 
   // 取得結果を返却形式へ変換する
+  // { Variable: response, Meaning: APIへ返却するために整形済みのユーザー情報 }
   const response = toUserResponse(user);
 
   // 呼び出し元へユーザー情報を返す
@@ -223,4 +238,6 @@ JSON-like Comment Out だけですべての実装詳細を説明しようとせ�
 - 任意項目は必要な場合だけ追加します。
 - Action は実装の逐語訳ではなく、処理の目的と流れを書いてください。
 - 関数・メソッド内部では、意味のある処理単位に通常コメントを付けることを推奨します。
+- 意味のある状態・中間結果を保持するローカル変数には、`{ Variable: ..., Meaning: ... }` 形式のコメントを付けることを推奨します。
+- 明白なループカウンタや自明な一時変数へのコメントは省略できます。
 - テンプレートを埋めること自体を目的にせず、コード理解に必要な情報を残してください。
