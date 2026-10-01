@@ -42,7 +42,9 @@ This English edition uses **English keys only**.
 
 ```text
 {
-  Responsibility:
+  Responsibility: [
+    FunctionName:
+  ]
   Action: [
     1:
     2:
@@ -64,7 +66,9 @@ This English edition uses **English keys only**.
 ```ts
 /*
 {
-  Responsibility: Get user information by user ID
+  Responsibility: [
+    getUser: Get user information by user ID
+  ]
   Action: [
     1: Validate userId
     2: Fetch the user from the repository
