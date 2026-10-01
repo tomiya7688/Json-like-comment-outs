@@ -95,7 +95,7 @@ const user = repository.find(userId);
 
 ## TypeScript / JavaScript Example
 
-関数・メソッド内部では、Action に対応する処理単位へ通常コメントを付けることを推奨します。
+関数・メソッド内部では、Action に対応する処理単位へ通常コメントを付け、意味のあるローカル変数には変数コメントを付けることを推奨します。
 
 ```ts
 /*
