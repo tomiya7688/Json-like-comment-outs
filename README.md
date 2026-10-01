@@ -12,7 +12,9 @@ JSON-like Comment Outs は、クラス・関数・メソッドの宣言直前に
 
 ```text
 {
-  責務: ユーザー情報を取得する
+  責務: [
+    GetUser: ユーザー情報を取得する
+  ]
   処理: [
     1: IDを検証する
     2: Repositoryから取得する
@@ -30,7 +32,9 @@ JSON-like Comment Outs は、クラス・関数・メソッドの宣言直前に
 
 ```text
 {
-  Responsibility: Get user information
+  Responsibility: [
+    GetUser: Get user information
+  ]
   Action: [
     1: Validate the user ID
     2: Fetch the user from the repository
