@@ -73,6 +73,8 @@ const user = repository.find(userId);
 
 内部コメントまで JSON-like にする必要はありません。
 
+ツール解析をしやすくするための書き方は**推奨**として定義しますが、解析都合のために人間向けコメントを厳しく縛ることはしません。
+
 ## Documentation
 
 ### 日本語 — Canonical
