@@ -331,17 +331,73 @@ SemanticKeys 設定形式の共通化方法は、Tools全体の設計と合わ�
 
 コメント形式は各プログラミング言語の構文に従います。
 
-## 12. 出力単位
+## 12. 出力単位とディレクトリ構成
 
-基本は**クラスごと**の Markdown 説明書です。
+基本は**1クラス相当 = 1 Markdown** とします。
 
-候補:
+出力先フォルダをルートとして、入力プロジェクト内の**相対ディレクトリ構成を基本的にそのまま再現**します。
 
-- 1クラス = 1 Markdown
-- Namespace / Package / Module ごとのディレクトリに配置
-- 全クラスを1つの Markdown にまとめるモード
+例:
 
-責務表生成ツールと同様、出力方法は選択可能にする方向で検討します。
+入力:
+
+```text
+project/
+├─ domain/
+│  └─ user/
+│     └─ UserService.cs
+└─ application/
+   └─ AuthService.cs
+```
+
+出力先を `docs-output/` とした場合:
+
+```text
+docs-output/
+├─ domain/
+│  └─ user/
+│     └─ UserService.md
+└─ application/
+   └─ AuthService.md
+```
+
+### 仕様先行でも同じ
+
+仕様を先にコメントとして書く場合も、既存実装のコメントから仕様書を生成する場合も、ディレクトリ生成ルールは変えません。
+
+つまり、
+
+```text
+入力側の相対パス
+        ↓
+出力フォルダ配下へミラー
+```
+
+を基本とします。
+
+これにより、ソースコードと生成された説明書の場所を対応付けやすくします。
+
+### 複数クラスが同じソースファイルにある場合
+
+同じソースファイル内に複数のクラス相当宣言がある場合は、同じ出力ディレクトリ内にクラス単位の Markdown を生成する方向とします。
+
+例:
+
+```text
+src/models/User.cs
+  ├─ User
+  └─ UserProfile
+```
+
+↓
+
+```text
+output/src/models/
+  ├─ User.md
+  └─ UserProfile.md
+```
+
+Namespace / Package / Module を追加の分類階層として利用するか、全クラスを1ファイルへ集約するモードを残すかは未確定です。
 
 ## 13. GUI / CUI
 
@@ -414,9 +470,8 @@ Issue 化の前に決める項目:
 
 - 正式なツール名
 - Action と内部コメントを両方表示するか
-- 1クラス1ファイルを標準にするか
-- 全クラス1ファイルモードを持つか
-- Namespace / Package / Module ごとの配置
+- Namespace / Package / Module を追加の分類階層として扱うか
+- 全クラス1ファイルの追加モードを持つか
 - コメントのない関数の扱い
 - コメントのないクラスの扱い
 - private / protected / internal 関数を含めるか
