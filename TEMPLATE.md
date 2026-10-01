@@ -4,97 +4,110 @@ JSON-like Comment Out は**クラス・関数・メソッドなどの宣言前**
 
 実装内部の処理単位や変数説明には通常コメントを使用します。
 
-## Class
+> 項目名・説明文は、そのコードを読むチームが最も読みやすい言語で書くことを推奨します。
 
-### 必須
+## 日本語テンプレート
 
-```text
-{
-  Responsibility:
-  Fields: [
-    fieldName:
-  ]
-}
-```
-
-### 推奨を含む基本形
+### Class
 
 ```text
 {
-  Responsibility:
-  Fields: [
+  責務:
+  フィールド: [
     fieldName:
   ]
-  Action: [
+  処理: [
     1:
   ]
 }
 ```
 
-## Function / Method
+### Function / Method
 
 ```text
 {
-  Responsibility:
-  Action: [
+  責務:
+  処理: [
     1:
     2:
   ]
-  Param: [
+  引数: [
     name:
   ]
-  Return: [
+  戻り値: [
     name:
   ]
 }
 ```
 
-## Full
+### Full
 
 ```text
 {
-  Responsibility:
-  Action: [
+  責務:
+  処理: [
     1:
     2:
   ]
-  Param: [
+  引数: [
     name:
   ]
-  Return: [
+  戻り値: [
     name:
   ]
-  SideEffect: [
+  副作用: [
 
   ]
-  Error: [
+  エラー: [
     ErrorName:
   ]
-  Note: [
+  補足: [
 
   ]
 }
 ```
+
+## English Template
+
+英語を主に使用するチームでは、例えば次のように書けます。
+
+```text
+{
+  Responsibility:
+  Action: [
+    1:
+    2:
+  ]
+  Param: [
+    name:
+  ]
+  Return: [
+    name:
+  ]
+}
+```
+
+英語キーは必須ではありません。
 
 ## TypeScript / JavaScript Example
 
 ```ts
 /*
 {
-  Responsibility: ユーザーIDからユーザー情報を取得する
-  Action: [
+  責務: ユーザーIDからユーザー情報を取得する
+  処理: [
     1: userIdの妥当性を確認する
     2: Repositoryから対象ユーザーを取得する
     3: 取得結果をAPI返却形式へ変換する
     4: 呼び出し元へ返す
   ]
-  Param: [
+  引数: [
     userId: 取得対象ユーザーのID
   ]
-  Return: [
+  戻り値: [
     user: API返却形式のユーザー情報
   ]
-  Error: [
+  エラー: [
     NotFound: 対象ユーザーが存在しない
   ]
 }
@@ -118,13 +131,13 @@ function getUser(userId) {
 ```ts
 /*
 {
-  Responsibility: ユーザー認証の状態と認証処理を管理する
-  Fields: [
+  責務: ユーザー認証の状態と認証処理を管理する
+  フィールド: [
     token: 現在利用している認証トークン
     user: ログイン中のユーザー情報
     isAuthenticated: 現在認証済みかどうか
   ]
-  Action: [
+  処理: [
     1: 認証情報を使ってログインする
     2: 認証結果とユーザー情報を保持する
     3: ログアウト時に認証状態を破棄する
@@ -155,16 +168,16 @@ class AuthManager {
 
 ```py
 # {
-#   Responsibility: ユーザーIDからユーザー情報を取得する
-#   Action: [
+#   責務: ユーザーIDからユーザー情報を取得する
+#   処理: [
 #     1: user_idの妥当性を確認する
 #     2: Repositoryから対象ユーザーを取得する
 #     3: 呼び出し元へ返す
 #   ]
-#   Param: [
+#   引数: [
 #     user_id: 取得対象ユーザーのID
 #   ]
-#   Return: [
+#   戻り値: [
 #     user: 取得したユーザー情報
 #   ]
 # }
@@ -208,11 +221,17 @@ for (let i = 0; i < items.length; i++) {
 
 ## Empty Param / Return
 
-```text
-Param: []
-```
+日本語:
 
 ```text
+引数: []
+戻り値: []
+```
+
+英語:
+
+```text
+Param: []
 Return: []
 ```
 
@@ -221,11 +240,11 @@ Return: []
 ```text
 Declaration
 └─ JSON-like Comment Out
-   └─ 責務・処理・入出力・状態を構造化して説明する
+   └─ チームが読める言語で責務・処理・入出力・状態を構造化する
 
 Implementation
 └─ Normal Comments
    └─ 処理単位・理由・非自明な変数を自然文で説明する
 ```
 
-JSON-like にすること自体を目的にせず、**読みやすく、書きやすく、保守しやすいこと**を優先してください。
+JSON-like にすることや英語キーを使うこと自体を目的にせず、**読みやすく、書きやすく、保守しやすいこと**を優先してください。
