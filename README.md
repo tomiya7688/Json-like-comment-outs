@@ -17,6 +17,20 @@ JSON-like Comment Outs では、コメントの形をある程度固定し、次
 - 何を受け取り、何を返すか
 - 必要に応じて、副作用やエラーが何か
 
+また、JSON-like Comment Out は通常のコード内コメントを置き換えるものではありません。
+
+**宣言直前の構造化コメントで全体像を示し、関数・メソッド内部では処理単位ごとに通常コメントを付ける**ことを推奨します。
+
+## ルールレベル
+
+ルールは次の3段階に分けます。
+
+- **必須 (MUST)**: JSON-like Comment Outs として基本的に満たす項目
+- **推奨 (SHOULD)**: 特別な理由がなければ採用する書き方
+- **任意 (MAY)**: 必要な場合に追加する項目・書き方
+
+詳細は [Specification](./SPECIFICATION.md) を参照してください。
+
 ## 基本形
 
 ### Class
@@ -34,8 +48,8 @@ JSON-like Comment Outs では、コメントの形をある程度固定し、次
 }
 ```
 
-クラスでは **Responsibility と Fields を詳しく** 書きます。  
-Action は、そのクラスが外部に対して提供する主要な振る舞いを書くことを推奨します。
+クラスでは **Responsibility と Fields が必須**です。  
+Action は、そのクラスが外部に対して提供する主要な振る舞いとして記述することを推奨します。
 
 ### Function / Method
 
@@ -57,7 +71,24 @@ Action は、そのクラスが外部に対して提供する主要な振る舞�
 }
 ```
 
-関数では **Action を中心に、処理の意味が追える粒度で詳しく** 書きます。
+関数では **Responsibility / Action / Param / Return が必須**です。
+
+さらに、実装内部では通常コメントを処理単位に付けることを推奨します。
+
+```ts
+function getUser(userId) {
+  // 入力値を検証する
+  validateUserId(userId);
+
+  // Repositoryから対象ユーザーを取得する
+  const user = repository.find(userId);
+
+  // 取得結果を返却形式へ変換する
+  return toUserResponse(user);
+}
+```
+
+構造化コメントは関数全体の設計図、通常コメントは実装を追うための道標として扱います。
 
 ## 重要な考え方
 
