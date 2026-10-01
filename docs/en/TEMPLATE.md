@@ -6,7 +6,9 @@ This English edition uses **English keys only**.
 
 ```text
 {
-  Responsibility:
+  Responsibility: [
+    ClassName:
+  ]
   Fields: [
     fieldName:
   ]
@@ -20,7 +22,9 @@ This English edition uses **English keys only**.
 
 ```text
 {
-  Responsibility:
+  Responsibility: [
+    FunctionName:
+  ]
   Action: [
     1:
     2:
