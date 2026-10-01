@@ -8,5 +8,8 @@ JSON-like Comment Outs を利用するサポートツールをこのディレク
 
 - [Responsibility Table / 責務表生成ツール](./responsibility-table/README.md)
 - [Class Description / クラス説明書生成ツール](./class-description/README.md)
+- [Comment Validator / コメント検証ツール](./comment-validator/README.md)
+- [XML ↔ JSON-like Converter](./xml-json-converter/README.md)
+- [Comment Generator / コメント自動挿入ツール](./comment-generator/README.md)
 
-今後、Lint、ドキュメント変換、検索・一覧化などのツールも追加予定です。
+どのツールも、現時点では未実装または設計段階です。
