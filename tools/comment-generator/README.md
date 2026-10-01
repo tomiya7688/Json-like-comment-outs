@@ -1,5 +1,6 @@
 # Comment Generator / コメント自動挿入ツール
 
+**まだできてないよ...**
 **Status: Planned — まだ実装されていません。**
 
 クラス・関数・メソッドの宣言を読み取り、JSON-like Comment Out の雛形を自動挿入するツールです。
