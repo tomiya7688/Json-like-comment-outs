@@ -7,5 +7,6 @@ JSON-like Comment Outs を利用するサポートツールをこのディレク
 ## Planned Tools
 
 - [Responsibility Table / 責務表生成ツール](./responsibility-table/README.md)
+- [Class Description / クラス説明書生成ツール](./class-description/README.md)
 
 今後、Lint、ドキュメント変換、検索・一覧化などのツールも追加予定です。
