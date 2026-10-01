@@ -6,7 +6,9 @@
 
 ```text
 {
-  責務:
+  責務: [
+    ClassName:
+  ]
   フィールド: [
     fieldName:
   ]
@@ -20,7 +22,9 @@
 
 ```text
 {
-  責務:
+  責務: [
+    FunctionName:
+  ]
   処理: [
     1:
     2:
