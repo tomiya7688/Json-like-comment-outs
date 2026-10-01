@@ -11,5 +11,8 @@ JSON-like Comment Outs を利用するサポートツールをこのディレク
 - [Comment Validator / コメント検証ツール](./comment-validator/README.md)
 - [XML ↔ JSON-like Converter](./xml-json-converter/README.md)
 - [Comment Generator / コメント自動挿入ツール](./comment-generator/README.md)
+- [Specification Diff / 仕様差分ツール](./specification-diff/README.md)
+- [Comment Search & Index / コメント検索・索引ツール](./comment-search-index/README.md)
+- [Documentation Site Generator / ドキュメントサイト生成ツール](./documentation-site-generator/README.md)
 
 どのツールも、現時点では未実装または設計段階です。
