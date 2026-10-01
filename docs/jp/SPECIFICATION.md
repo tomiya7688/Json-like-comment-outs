@@ -1,6 +1,6 @@
 # JSON-like Comment Outs Specification
 
-Status: **Draft v0.8**
+Status: **Draft v0.9**
 
 > **この日本語版を仕様の正本 (canonical) とします。**
 
@@ -60,7 +60,9 @@ JSON-like Comment Outs として基本的に満たすルールです。
 
 ```text
 {
-  責務:
+  責務: [
+    GetUser:
+  ]
   処理: []
   引数: []
   戻り値: []
@@ -157,7 +159,9 @@ JSON-like Comment Outs として基本的に満たすルールです。
 
 ```text
 {
-  責務: ユーザー認証の状態と認証処理を管理する
+  責務: [
+    AuthManager: ユーザー認証の状態と認証処理を管理する
+  ]
   フィールド: [
     token: 現在利用している認証トークン
     user: ログイン中のユーザー情報
@@ -174,7 +178,9 @@ JSON-like Comment Outs として基本的に満たすルールです。
 
 ```text
 {
-  Responsibility: ユーザー認証の状態と認証処理を管理する
+  Responsibility: [
+    AuthManager: ユーザー認証の状態と認証処理を管理する
+  ]
   Fields: [
     token: 現在利用している認証トークン
     user: ログイン中のユーザー情報
@@ -209,7 +215,9 @@ JSON-like Comment Outs として基本的に満たすルールです。
 
 ```text
 {
-  責務: ユーザー情報を取得する
+  責務: [
+    GetUser: ユーザー情報を取得する
+  ]
   処理: [
     1: userIdを検証する
     2: Repositoryからユーザーを取得する
@@ -228,7 +236,9 @@ JSON-like Comment Outs として基本的に満たすルールです。
 
 ```text
 {
-  Responsibility: ユーザー情報を取得する
+  Responsibility: [
+    GetUser: ユーザー情報を取得する
+  ]
   Action: [
     1: userIdを検証する
     2: Repositoryからユーザーを取得する
@@ -264,6 +274,30 @@ decorator / attribute / annotation など、その宣言へ付随する構文が
 <attribute / decorator / annotation>
 declaration
 ```
+
+### 責務に宣言名を含める
+
+ツールがコメントだけを読んで対象名と責務を取得できるように、責務は次の形で書くことを推奨します。
+
+クラス:
+
+```text
+責務: [
+  UserService: ユーザー情報の取得・更新を担当する
+]
+```
+
+関数 / メソッド:
+
+```text
+責務: [
+  GetUser: ユーザーIDからユーザー情報を取得する
+]
+```
+
+この形にすると、責務表生成やクラス説明書生成のようなコメント解析ツールは、ソースコードの宣言そのものを解析せずに名前と責務を取得できます。
+
+これはツール解析のための**推奨**であり、必須ではありません。
 
 ### Param / Fields の名前
 
