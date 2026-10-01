@@ -1,5 +1,6 @@
 # Documentation Site Generator / ドキュメントサイト生成ツール
 
+**まだできてないよ...**
 **Status: Planned — まだ実装されていません。**
 
 コメントや、他のToolsが生成した Markdown から HTML ドキュメントサイトを生成するツールです。
