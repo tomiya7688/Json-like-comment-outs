@@ -17,6 +17,10 @@ Primary sources:
 
 The tool restructures information already written in comments.
 
+A central idea is **comment-driven documentation**: if comments are written carefully, they can be turned directly into specification or documentation.
+
+For specification-first development, teams may write declaration comments before implementation, generate the Markdown specification, and then implement according to those comments.
+
 ## 2. No Implementation Validation
 
 This tool does not verify:
@@ -37,6 +41,13 @@ For this tool, **comments are the source of truth**.
 ## Responsibility
 
 Manage user information.
+
+## Fields
+
+| Field | Description |
+| --- | --- |
+| repository | Repository used to access user information |
+| cache | Cache for previously retrieved users |
 
 ## Functions
 
@@ -72,35 +83,50 @@ Get user information by ID.
 3. Convert to the API response format
 ```
 
-## 4. Internal Comments
+## 4. Class Fields
+
+Fields from the class-level JSON-like Comment Out are included in the generated class document.
+
+```markdown
+## Fields
+
+| Field | Description |
+| --- | --- |
+| repository | Repository used to access user information |
+| cache | Cache for previously retrieved users |
+```
+
+The tool does not validate whether these comments match actual field declarations.
+
+## 5. Internal Comments
 
 Ordinary comments inside a function are collected in source order.
 
 The tool does not summarize, infer, or add missing processing steps.
 
-## 5. JSON-like Action vs Internal Comments
+## 6. JSON-like Action vs Internal Comments
 
 Declaration-level Action and ordinary implementation comments are separate information sources.
 
 Whether the first version displays only implementation comments or both sources is still undecided.
 
-## 6. SemanticKeys
+## 7. SemanticKeys
 
 JSON-like declaration comments are resolved using SemanticKeys.
 
 Ordinary implementation comments are plain text and do not use SemanticKeys.
 
-## 7. Output Units
+## 8. Output Units
 
 The primary design is one Markdown document per class-like unit.
 
 Alternative grouping modes may be supported.
 
-## 8. GUI / CUI
+## 9. GUI / CUI
 
 Both GUI and CUI versions are planned and should share the same parser and generator.
 
-## 9. Language Priority
+## 10. Language Priority
 
 First priority:
 
@@ -117,7 +143,7 @@ Next:
 
 For languages without classes, such as Go, the documentation unit must be defined separately.
 
-## 10. Open Questions
+## 11. Open Questions
 
 Before implementation issues are created, decide:
 
