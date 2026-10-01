@@ -1,5 +1,6 @@
 # Comment Search & Index / コメント検索・索引ツール
 
+**まだできてないよ...**
 **Status: Planned — まだ実装されていません。**
 
 JSON-like Comment Outs と通常コメントを検索し、コードベース内の責務や機能を探しやすくするツールです。
