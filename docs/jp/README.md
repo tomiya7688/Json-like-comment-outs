@@ -10,7 +10,9 @@ JSON-like Comment Outs は、XMLドキュメントコメントのような宣言
 
 ```text
 {
-  責務: ユーザー情報を取得する
+  責務: [
+    GetUser: ユーザー情報を取得する
+  ]
   処理: [
     1: IDを検証する
     2: Repositoryから取得する
@@ -28,7 +30,9 @@ JSON-like Comment Outs は、XMLドキュメントコメントのような宣言
 
 ```text
 {
-  Responsibility: ユーザー情報を取得する
+  Responsibility: [
+    GetUser: ユーザー情報を取得する
+  ]
   Action: [
     1: IDを検証する
     2: Repositoryから取得する
