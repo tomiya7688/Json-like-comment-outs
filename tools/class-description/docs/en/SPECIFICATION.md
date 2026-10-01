@@ -21,6 +21,8 @@ A central idea is **comment-driven documentation**: if comments are written care
 
 For specification-first development, teams may write declaration comments before implementation, generate the Markdown specification, and then implement according to those comments.
 
+In both workflows, generated documentation mirrors the input project's relative directory structure under the selected output directory.
+
 ## 2. No Implementation Validation
 
 This tool does not verify:
@@ -116,11 +118,39 @@ JSON-like declaration comments are resolved using SemanticKeys.
 
 Ordinary implementation comments are plain text and do not use SemanticKeys.
 
-## 8. Output Units
+## 8. Output Units and Directory Layout
 
-The primary design is one Markdown document per class-like unit.
+The primary design is **one Markdown document per class-like unit**.
 
-Alternative grouping modes may be supported.
+The selected output directory acts as the root, and the tool mirrors the input project's relative directory structure underneath it.
+
+Example input:
+
+```text
+project/
+├─ domain/
+│  └─ user/
+│     └─ UserService.cs
+└─ application/
+   └─ AuthService.cs
+```
+
+With `docs-output/` as the output directory:
+
+```text
+docs-output/
+├─ domain/
+│  └─ user/
+│     └─ UserService.md
+└─ application/
+   └─ AuthService.md
+```
+
+The same rule applies to both specification-first and implementation-first workflows.
+
+If one source file contains multiple class-like declarations, each class-like unit is expected to produce its own Markdown file in the same mirrored output directory.
+
+Additional Namespace / Package / Module grouping and an optional all-in-one output mode remain open design questions.
 
 ## 9. GUI / CUI
 
