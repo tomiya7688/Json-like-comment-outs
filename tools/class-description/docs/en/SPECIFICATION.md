@@ -15,6 +15,8 @@ Primary sources:
 - JSON-like Comment Outs before functions / methods
 - Ordinary comments inside functions / methods
 
+This tool is designed to analyze **comments only**. Class and function names are read from Responsibility entries rather than from code declarations.
+
 The tool restructures information already written in comments.
 
 A central idea is **comment-driven documentation**: if comments are written carefully, they can be turned directly into specification or documentation.
@@ -34,6 +36,22 @@ This tool does not verify:
 - Whether internal comments correctly describe the code
 
 For this tool, **comments are the source of truth**.
+
+Recommended forms:
+
+```text
+Responsibility: [
+  UserService: Manage user information
+]
+```
+
+```text
+Responsibility: [
+  GetUser: Get user information by ID
+]
+```
+
+The left side provides the declaration name and the right side provides its responsibility.
 
 ## 3. Basic Output
 
