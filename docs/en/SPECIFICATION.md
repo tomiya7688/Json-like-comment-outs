@@ -192,6 +192,30 @@ The rules in this section are **SHOULD-level recommendations** intended to make 
 
 Human readability may take priority over tooling convenience.
 
+### Include the declaration name in Responsibility
+
+To let comment-only tools obtain both the target name and its responsibility, the following form is recommended.
+
+Class:
+
+```text
+Responsibility: [
+  UserService: Manage user information
+]
+```
+
+Function / method:
+
+```text
+Responsibility: [
+  GetUser: Get user information by user ID
+]
+```
+
+With this form, tools such as responsibility-table and class-description generators can work from comments without parsing the declaration itself.
+
+This is a **SHOULD-level recommendation**, not a requirement.
+
 ### Association with declarations
 
 Place a JSON-like Comment Out immediately before its target declaration when practical.
