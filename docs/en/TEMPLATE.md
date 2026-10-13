@@ -53,6 +53,7 @@ This English edition uses **English keys only**.
   Param: [
     name:
   ],
+  TypeParam: [],
   Return: [
     name:
   ],
