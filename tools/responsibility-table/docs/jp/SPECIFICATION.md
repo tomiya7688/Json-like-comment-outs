@@ -123,6 +123,7 @@ Rust についても struct / enum / trait など、責務表へ含める宣言�
     "Action": ["処理", "手順"],
     "Fields": ["フィールド", "状態"],
     "Param": ["引数", "入力"],
+    "TypeParam": ["型引数", "型パラメータ"],
     "Return": ["戻り値", "出力"],
     "SideEffect": ["副作用"],
     "Error": ["エラー"],
