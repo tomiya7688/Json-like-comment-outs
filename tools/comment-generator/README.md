@@ -18,16 +18,15 @@ User GetUser(string userId, bool includeDeleted)
 ```text
 {
   責務: [
-    GetUser:
+    GetUser: <未記入>
   ],
   処理: [
   ],
   引数: [
-    userId:,
-    includeDeleted:
+    userId: <未記入>,
+    includeDeleted: <未記入>
   ],
-  戻り値: [
-  ]
+  戻り値: []
 }
 ```
 
