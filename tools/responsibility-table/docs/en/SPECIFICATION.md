@@ -95,6 +95,7 @@ The tool resolves comment keys using a simple **canonical key → aliases** JSON
     "Action": ["Actions", "Steps"],
     "Fields": ["State"],
     "Param": ["Parameter", "Parameters", "Input"],
+    "TypeParam": ["TypeParameter", "TypeParameters"],
     "Return": ["Returns", "Output"],
     "SideEffect": ["SideEffects"],
     "Error": ["Errors"],
