@@ -62,9 +62,9 @@ JSON-like Comment Outs として基本的に満たすルールです。
 {
   責務: [
     GetUser:
-  ]
-  処理: []
-  引数: []
+  ],
+  処理: [],
+  引数: [],
   戻り値: []
 }
 ```
@@ -73,9 +73,11 @@ JSON-like Comment Outs として基本的に満たすルールです。
 
 ```text
 {
-  Responsibility:
-  Action: []
-  Param: []
+  Responsibility: [
+    GetUser:
+  ],
+  Action: [],
+  Param: [],
   Return: []
 }
 ```
