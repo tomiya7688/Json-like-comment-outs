@@ -323,6 +323,7 @@ Issue化前に決定します。
 - Responsibility
 - Action
 - Param
+- TypeParam
 - Return
 - Fields
 - Note
