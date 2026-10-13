@@ -14,14 +14,14 @@ JSON-like Comment Outs は、クラス・関数・メソッドの宣言直前に
 {
   責務: [
     GetUser: ユーザー情報を取得する
-  ]
+  ],
   処理: [
-    1: IDを検証する
+    1: IDを検証する,
     2: Repositoryから取得する
-  ]
+  ],
   引数: [
     userId: 対象ユーザーID
-  ]
+  ],
   戻り値: [
     user: ユーザー情報
   ]
@@ -34,14 +34,14 @@ JSON-like Comment Outs は、クラス・関数・メソッドの宣言直前に
 {
   Responsibility: [
     GetUser: Get user information
-  ]
+  ],
   Action: [
-    1: Validate the user ID
+    1: Validate the user ID,
     2: Fetch the user from the repository
-  ]
+  ],
   Param: [
     userId: ID of the target user
-  ]
+  ],
   Return: [
     user: User information
   ]
