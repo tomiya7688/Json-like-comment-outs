@@ -8,10 +8,10 @@ This English edition uses **English keys only**.
 {
   Responsibility: [
     ClassName:
-  ]
+  ],
   Fields: [
     fieldName:
-  ]
+  ],
   Action: [
     1:
   ]
@@ -24,14 +24,14 @@ This English edition uses **English keys only**.
 {
   Responsibility: [
     FunctionName:
-  ]
+  ],
   Action: [
-    1:
+    1:,
     2:
-  ]
+  ],
   Param: [
     name:
-  ]
+  ],
   Return: [
     name:
   ]
@@ -44,19 +44,19 @@ This English edition uses **English keys only**.
 {
   Responsibility: [
     FunctionName:
-  ]
+  ],
   Action: [
-    1:
+    1:,
     2:
-  ]
+  ],
   Param: [
     name:
-  ]
+  ],
   Return: [
     name:
-  ]
-  SideEffect: []
-  Error: []
+  ],
+  SideEffect: [],
+  Error: [],
   Note: []
 }
 ```
@@ -68,19 +68,19 @@ This English edition uses **English keys only**.
 {
   Responsibility: [
     getUser: Get user information by user ID
-  ]
+  ],
   Action: [
-    1: Validate userId
-    2: Fetch the user from the repository
-    3: Convert the result to the API response format
+    1: Validate userId,
+    2: Fetch the user from the repository,
+    3: Convert the result to the API response format,
     4: Return the result to the caller
-  ]
+  ],
   Param: [
     userId: ID of the target user
-  ]
+  ],
   Return: [
     user: User information in API response format
-  ]
+  ],
   Error: [
     NotFound: The target user does not exist
   ]
