@@ -13,7 +13,7 @@ This English edition uses **English keys only**.
     fieldName:
   ],
   Action: [
-    1:
+    1: Step one
   ]
 }
 ```
@@ -26,12 +26,13 @@ This English edition uses **English keys only**.
     FunctionName:
   ],
   Action: [
-    1:,
-    2:
+    1: Step one,
+    2: Step two
   ],
   Param: [
     name:
   ],
+  TypeParam: [],
   Return: [
     name:
   ]
@@ -46,8 +47,8 @@ This English edition uses **English keys only**.
     FunctionName:
   ],
   Action: [
-    1:,
-    2:
+    1: Step one,
+    2: Step two
   ],
   Param: [
     name:
