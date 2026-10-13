@@ -17,13 +17,15 @@ User GetUser(string userId, bool includeDeleted)
 
 ```text
 {
-  責務:
+  責務: [
+    GetUser:
+  ],
   処理: [
-  ]
+  ],
   引数: [
-    userId:
+    userId:,
     includeDeleted:
-  ]
+  ],
   戻り値: [
   ]
 }
@@ -40,6 +42,7 @@ User GetUser(string userId, bool includeDeleted)
 - 宣言を読む
 - 引数名やフィールド名を取得する
 - 必要な Semantic Key の枠を作る
+- 複数項目は推奨形式としてカンマ区切りで生成する
 - 人間が説明を書く
 
 という補助ツールにします。
