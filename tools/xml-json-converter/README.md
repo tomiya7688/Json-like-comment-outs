@@ -19,10 +19,12 @@ XML Documentation コメントと JSON-like Comment Outs を相互変換する�
 
 ```text
 {
-  責務: ユーザーを取得する
+  責務: [
+    GetUser: ユーザーを取得する
+  ],
   引数: [
     userId: 対象ユーザーID
-  ]
+  ],
   戻り値: [
     user: ユーザー情報
   ]
@@ -43,8 +45,10 @@ XML Documentation コメントと JSON-like Comment Outs を相互変換する�
 - summary ↔ Responsibility
 - param ↔ Param
 - returns ↔ Return
+- typeparam ↔ TypeParam
 - exception ↔ Error
 - remarks / note 系 ↔ Note
+- see / seealso / cref ↔ 将来の参照系 Semantic Key 候補
 
 完全に1対1対応できない要素をどう扱うかは今後決めます。
 
