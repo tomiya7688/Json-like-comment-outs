@@ -32,14 +32,14 @@ JSON-like Comment Outs は、XMLドキュメントコメントのような宣言
 {
   Responsibility: [
     GetUser: ユーザー情報を取得する
-  ]
+  ],
   Action: [
     1: IDを検証する,
     2: Repositoryから取得する
-  ]
+  ],
   Param: [
     userId: 対象ユーザーID
-  ]
+  ],
   Return: [
     user: ユーザー情報
   ]
