@@ -166,14 +166,14 @@ JSON-like Comment Outs として基本的に満たすルールです。
 {
   責務: [
     AuthManager: ユーザー認証の状態と認証処理を管理する
-  ]
+  ],
   フィールド: [
-    token: 現在利用している認証トークン
+    token: 現在利用している認証トークン,
     user: ログイン中のユーザー情報
-  ]
+  ],
   処理: [
-    1: ログインする
-    2: 認証状態を保持する
+    1: ログインする,
+    2: 認証状態を保持する,
     3: ログアウト時に認証状態を破棄する
   ]
 }
@@ -185,14 +185,14 @@ JSON-like Comment Outs として基本的に満たすルールです。
 {
   Responsibility: [
     AuthManager: ユーザー認証の状態と認証処理を管理する
-  ]
+  ],
   Fields: [
-    token: 現在利用している認証トークン
+    token: 現在利用している認証トークン,
     user: ログイン中のユーザー情報
-  ]
+  ],
   Action: [
-    1: ログインする
-    2: 認証状態を保持する
+    1: ログインする,
+    2: 認証状態を保持する,
     3: ログアウト時に認証状態を破棄する
   ]
 }
@@ -222,15 +222,15 @@ JSON-like Comment Outs として基本的に満たすルールです。
 {
   責務: [
     GetUser: ユーザー情報を取得する
-  ]
+  ],
   処理: [
-    1: userIdを検証する
-    2: Repositoryからユーザーを取得する
+    1: userIdを検証する,
+    2: Repositoryからユーザーを取得する,
     3: API返却形式へ変換する
-  ]
+  ],
   引数: [
     userId: 取得対象ユーザーのID
-  ]
+  ],
   戻り値: [
     user: API返却形式のユーザー情報
   ]
@@ -243,15 +243,15 @@ JSON-like Comment Outs として基本的に満たすルールです。
 {
   Responsibility: [
     GetUser: ユーザー情報を取得する
-  ]
+  ],
   Action: [
-    1: userIdを検証する
-    2: Repositoryからユーザーを取得する
+    1: userIdを検証する,
+    2: Repositoryからユーザーを取得する,
     3: API返却形式へ変換する
-  ]
+  ],
   Param: [
     userId: 取得対象ユーザーのID
-  ]
+  ],
   Return: [
     user: API返却形式のユーザー情報
   ]
@@ -362,11 +362,11 @@ Comment Generator などが生成する未記入テンプレートを許容し�
 {
   責務: [
     GetUser:
-  ]
-  処理: []
+  ],
+  処理: [],
   引数: [
     userId:
-  ]
+  ],
   戻り値: []
 }
 ```
@@ -388,8 +388,8 @@ Comment Generator などが生成する未記入テンプレートを許容し�
 
 ```text
 {
-  責務: ...
-  Permission: AdminOnly
+  責務: ...,
+  Permission: AdminOnly,
   Cache: 5min
 }
 ```
