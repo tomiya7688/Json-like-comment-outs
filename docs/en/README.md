@@ -10,14 +10,14 @@ This edition uses **English keys only**.
 {
   Responsibility: [
     GetUser: Get user information
-  ]
+  ],
   Action: [
-    1: Validate the user ID
+    1: Validate the user ID,
     2: Fetch the user from the repository
-  ]
+  ],
   Param: [
     userId: ID of the target user
-  ]
+  ],
   Return: [
     user: User information
   ]
