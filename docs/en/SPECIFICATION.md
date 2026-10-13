@@ -1,6 +1,6 @@
 # JSON-like Comment Outs Specification
 
-Status: **Draft v0.9**
+Status: **Draft v0.10**
 
 > This English edition is a translation. The Japanese specification is canonical.
 
@@ -66,6 +66,7 @@ For this English edition, the recommended vocabulary is:
 | Main actions or behavior | Action |
 | State held by a class | Fields |
 | Input values | Param / Parameters |
+| Generic type parameters | TypeParam / TypeParameters |
 | Return value | Return |
 | External state changes | SideEffect |
 | Failure conditions | Error |
@@ -81,9 +82,10 @@ For this English edition, the recommended vocabulary is:
 
 ```text
 {
-  Key: value
+  Key: value,
   Key: [
-    name: description
+    name1: description,
+    name2: description
   ]
 }
 ```
@@ -97,6 +99,8 @@ For this English edition, the recommended vocabulary is:
 
 ### SHOULD
 
+- Separate sibling fields and list entries with commas
+- Do not place a trailing comma after the final field or list entry
 - Avoid excessive nesting
 - Keep markup lighter than the explanation
 - Avoid mixing unrelated responsibilities into one field
@@ -104,10 +108,11 @@ For this English edition, the recommended vocabulary is:
 
 ### MAY
 
-- Commas
 - Double quotes
 
 Being parseable as strict JSON is not a requirement.
+
+Commas are recommended because they make JSON-like boundaries clearer and simplify parsing, but a missing comma alone does not make a human-readable comment invalid.
 
 ## 7. Classes
 
@@ -222,31 +227,7 @@ Place a JSON-like Comment Out immediately before its target declaration when pra
 
 If decorators, attributes, or annotations belong to that declaration, tools may treat the comment as belonging to the declaration across those constructs.
 
-### Include the declaration name in Responsibility
-
-To let comment-only tools obtain both the target name and its responsibility, the following form is recommended.
-
-Class:
-
-```text
-Responsibility: [
-  UserService: Manage user information
-]
-```
-
-Function / method:
-
-```text
-Responsibility: [
-  GetUser: Get user information by user ID
-]
-```
-
-With this form, tools such as responsibility-table and class-description generators can work from comments without parsing the declaration itself.
-
-This is a **SHOULD-level recommendation**, not a requirement.
-
-### Param / Fields names
+### Param / TypeParam / Fields names
 
 Use actual implementation names for parameter and field entries when practical.
 
@@ -255,6 +236,8 @@ Param: [
   userId: ID of the target user
 ]
 ```
+
+The same recommendation applies to TypeParam and Fields entries.
 
 This makes mechanical comparison between comments and declarations possible.
 
@@ -356,6 +339,19 @@ Each tool defines which declarations it supports.
 ### SideEffect
 
 Use for externally visible state changes.
+
+### TypeParam
+
+Use for generic type parameters on generic types or functions.
+
+```text
+TypeParam: [
+  T: Type of the values being handled,
+  TResult: Type of the processing result
+]
+```
+
+Type parameter names should match implementation names when practical.
 
 ### Error
 
