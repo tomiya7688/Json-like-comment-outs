@@ -8,10 +8,10 @@
 {
   責務: [
     ClassName:
-  ]
+  ],
   フィールド: [
     fieldName:
-  ]
+  ],
   処理: [
     1:
   ]
@@ -24,14 +24,14 @@
 {
   責務: [
     FunctionName:
-  ]
+  ],
   処理: [
-    1:
+    1:,
     2:
-  ]
+  ],
   引数: [
     name:
-  ]
+  ],
   戻り値: [
     name:
   ]
@@ -44,19 +44,19 @@
 {
   責務: [
     FunctionName:
-  ]
+  ],
   処理: [
-    1:
+    1:,
     2:
-  ]
+  ],
   引数: [
     name:
-  ]
+  ],
   戻り値: [
     name:
-  ]
-  副作用: []
-  エラー: []
+  ],
+  副作用: [],
+  エラー: [],
   補足: []
 }
 ```
@@ -67,10 +67,10 @@
 {
   Responsibility: [
     ClassName:
-  ]
+  ],
   Fields: [
     fieldName:
-  ]
+  ],
   Action: [
     1:
   ]
@@ -83,14 +83,14 @@
 {
   Responsibility: [
     FunctionName:
-  ]
+  ],
   Action: [
-    1:
+    1:,
     2:
-  ]
+  ],
   Param: [
     name:
-  ]
+  ],
   Return: [
     name:
   ]
