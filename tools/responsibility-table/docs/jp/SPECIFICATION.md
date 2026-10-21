@@ -1,10 +1,11 @@
 # 責務表生成ツール 仕様
 
-Status: **Design Draft**
+Status: **MVP実装済み（Go CUI）**
 
 > この日本語版を正本 (canonical) とします。  
-> 現時点では設計段階であり、実装は行いません。
+> MVPの仕様と実装範囲を記録します。
 
+MVPの範囲は§10で確定しています。GUI、他言語、分割出力は後続の設計・実装Issueで扱います。
 ## 1. 目的
 
 JSON-like Comment Outs に記述された責務を抽出し、コードベース全体を俯瞰できる Markdown の責務表を生成します。
@@ -12,7 +13,7 @@ JSON-like Comment Outs に記述された責務を抽出し、コードベース
 基本出力:
 
 ```markdown
-| クラス名 | 責務 |
+| 名前 | 責務 |
 | --- | --- |
 | UserService | ユーザー情報を管理する |
 | AuthManager | 認証状態と認証処理を管理する |
@@ -24,19 +25,20 @@ JSON-like Comment Outs に記述された責務を抽出し、コードベース
 
 推奨形:
 
-```text
-責務: [
-  UserService: ユーザー情報を管理する
-]
+```json
+{
+  "責務": {
+    "UserService": "ユーザー情報を管理する"
+  }
+}
 ```
 
-このため、責務表生成のためにソースコードの宣言を解析する必要はありません。
 
 ## 2. 対応形態
 
-### GUI
+### GUI（MVP後）
 
-GUI版を用意します。
+GUI版はMVP後の拡張とします。
 
 想定する主な操作:
 
@@ -48,25 +50,27 @@ GUI版を用意します。
 
 マウス操作だけでなく、**Alt 起点のキーボード操作**に対応します。
 
-具体的なアクセラレータキーは実装設計時に決定します。
+具体的なAltアクセラレーターはGUI設計Issueで決めます。
 
-### CUI
+### CUI（MVP）
 
-CUI版も用意します。
+MVPの操作形態はCUIです。対応言語はGoとします。
 
-GUI と CUI は同じ解析・生成ロジックと同じ SemanticKeys 設定を使用します。
+責務コメントの抽出とMarkdown生成を行います。コマンド名・オプション名は§10で定めます。
 
-具体的なコマンド名・オプション名は未確定です。
+
 
 ## 3. 出力方式
 
 次の方式を選択できるようにします。
 
-### 1ファイルに集約
+### MVP: 1ファイルに集約
 
 対象すべてを同じ Markdown ファイルへ出力します。
 
-### 単位ごとに分割
+既定の出力先は入力ディレクトリ直下の responsibility-table.md とし、CUIの --output で変更できます。
+
+### 後続機能: 単位ごとに分割
 
 言語の構造に応じて、Namespace / Package / Module などの単位ごとに Markdown を分割します。
 
@@ -89,26 +93,13 @@ GUI と CUI は同じ解析・生成ロジックと同じ SemanticKeys 設定を
 
 実装順は変更される可能性があります。
 
+MVPで対応する言語はGoのみです。その他の言語は別Issueで追加します。
+
 ## 5. 宣言単位
 
-クラスを持つ言語では、基本的にクラス相当の宣言を責務表の対象とします。
+MVPではソースコードの宣言を解析しません。責務表の1行は、コメント内のResponsibilityオブジェクトにある名前と責務の組です。
 
-### Go
-
-Go はクラスを持たないため、対象単位はまだ確定していません。
-
-候補:
-
-- struct
-- interface
-- package
-- その他、Goで責務単位として自然な宣言
-
-Goを無理に「クラス相当」へ当てはめず、Goとして読みやすい責務表を設計します。
-
-### Rust
-
-Rust についても struct / enum / trait など、責務表へ含める宣言単位を実装前に確定します。
+Goのstruct、interface、packageなどの宣言単位はMVPで使いません。Rustを含む他言語の宣言単位は、ソース構造を扱う後続設計で決めます。
 
 ## 6. SemanticKeys
 
@@ -123,8 +114,7 @@ Rust についても struct / enum / trait など、責務表へ含める宣言�
     "Action": ["処理", "手順"],
     "Fields": ["フィールド", "状態"],
     "Param": ["引数", "入力"],
-    "TypeParam": ["型引数", "型パラメータ"],
-    "Return": ["戻り値", "出力"],
+    "Returns": ["戻り値", "出力"],
     "SideEffect": ["副作用"],
     "Error": ["エラー"],
     "Note": ["補足"]
@@ -152,7 +142,7 @@ RESPONSIBILITY
 Responsible
 ```
 
-## 7. GUI の SemanticKeys 設定
+## 7. GUI の SemanticKeys 設定（MVP後）
 
 GUI には**設定ボタン**を用意し、SemanticKeys を編集できるようにします。
 
@@ -183,18 +173,20 @@ Action
 
 GUIで変更した設定は CUI と共有します。
 
-設定ファイルのファイル名・配置場所・Global / Project の優先規則はまだ確定していません。
+MVPでは入力ディレクトリ直下の .json-like-comment-outs/semantic-keys.json を既定設定とします。CUIの --semantic-keys で別ファイルを指定できます。Global設定とGUI編集はMVP対象外です。
 
 ## 8. 責務の抽出
 
 責務表生成時は、SemanticKeys により `Responsibility` に正規化された Key の値を使用します。
 
-`Responsibility` の中では、`名前: 責務` の組を読み取ります。
+`Responsibility` の中では、名前をキー、責務を値とするオブジェクトを読み取ります。
 
-```text
-Responsibility: [
-  UserService: ユーザー情報を管理する
-]
+```json
+{
+  "Responsibility": {
+    "UserService": "ユーザー情報を管理する"
+  }
+}
 ```
 
 この `UserService` を表の名前列、右側の説明を責務列へ出力します。
@@ -205,30 +197,28 @@ Responsibility: [
 - AIで責務を自動生成しない
 - 未知の Key を勝手に Responsibility とみなさない
 
-コメントがない宣言を無視するか、空欄として出力するかは未確定です。
+MVPはコメントだけを調べるため、Responsibility項目がない宣言を列挙できません。そのため空行や警告は出さず、Responsibilityオブジェクトのエントリだけを出力します。
 
 ## 9. Markdown
+
+MVPでは --locale ja|en を使い、既定は ja とします。見出しは「名前」「責務」または「Name」「Responsibility」とし、責務文は翻訳しません。
 
 最小形式:
 
 ```markdown
-| クラス名 | 責務 |
+| 名前 | 責務 |
 | --- | --- |
 | UserService | ユーザー情報を管理する |
 ```
 
 言語によって「クラス名」の列名が不自然な場合は、`型名`、`宣言名` などへ変更できる設計を検討します。
 
-## 10. 未確定事項
+## 10. MVPの決定事項
 
-Issue 化の前に、少なくとも次を決めます。
-
-- Go の責務単位
-- Rust の責務単位
-- コメントがない宣言の扱い
-- 出力ファイル命名規則
-- Namespace / Package / Module 分割の詳細
-- SemanticKeys 設定ファイルの名前と配置場所
-- GUI の具体的な Alt アクセラレータ
-- CUI のコマンド / オプション名
-- Markdown の列名ローカライズ
+- 対応形態はCUI、対応言語はGoのみです。入力ディレクトリ以下のGoソースを再帰的に読みます。
+- コマンド名は responsibility-table とし、必須の --source <dir>、任意の --output <file>、--semantic-keys <file>、--locale ja|en を受け付けます。
+- ソース宣言やASTは解析しません。Responsibilityオブジェクトの各名前と責務の組を1行にします。
+- Responsibility項目を含まない宣言は列挙できないため、行も警告も出しません。
+- 出力は1ファイルに集約し、既定の出力先は入力ディレクトリ直下の responsibility-table.md です。パッケージなどによる分割は後続機能です。
+- SemanticKeys設定の既定位置は入力ディレクトリ直下の .json-like-comment-outs/semantic-keys.json です。明示パスがあればそちらを使い、設定ファイルがなければ本仕様の既定別名を使います。
+- 見出しは --locale ja|en で切り替え、既定は ja です。GUI、Altアクセラレーター、Go以外の言語、Rustなどの宣言単位は後続Issueに延期します。
