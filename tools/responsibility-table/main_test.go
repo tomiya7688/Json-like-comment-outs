@@ -36,3 +36,17 @@ func TestRunRejectsOutputHardLinkedToGoSource(t *testing.T) {
 		t.Fatal("Go source file was changed")
 	}
 }
+
+func TestExtractResponsibilityRejectsNullValue(t *testing.T) {
+	lookup, err := buildSemanticKeyLookup(defaultSemanticKeys())
+	if err != nil {
+		t.Fatal(err)
+	}
+	rows, candidate, err := extractResponsibility(`{"Responsibility":{"UserService":null}}`, lookup)
+	if !candidate || err == nil || !strings.Contains(err.Error(), "must be strings") {
+		t.Fatalf("null responsibility: rows=%v, candidate=%v, err=%v", rows, candidate, err)
+	}
+	if len(rows) != 0 {
+		t.Fatalf("unexpected rows for null responsibility: %v", rows)
+	}
+}

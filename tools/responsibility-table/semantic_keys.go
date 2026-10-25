@@ -157,7 +157,7 @@ func extractResponsibility(comment string, semanticLookup map[string]string) ([]
 	if len(trimmedValue) == 0 || trimmedValue[0] != '{' {
 		return nil, true, fmt.Errorf("Responsibility value must be an object")
 	}
-	var responsibilities map[string]string
+	var responsibilities map[string]*string
 	if err := json.Unmarshal(value, &responsibilities); err != nil {
 		return nil, true, fmt.Errorf("Responsibility values must be strings: %w", err)
 	}
@@ -169,7 +169,10 @@ func extractResponsibility(comment string, semanticLookup map[string]string) ([]
 	sort.Strings(names)
 	rows := make([]tableRow, 0, len(names))
 	for _, name := range names {
-		rows = append(rows, tableRow{name: name, responsibility: responsibilities[name]})
+		if responsibilities[name] == nil {
+			return nil, true, fmt.Errorf("Responsibility values must be strings: %q is null", name)
+		}
+		rows = append(rows, tableRow{name: name, responsibility: *responsibilities[name]})
 	}
 	return rows, true, nil
 }
