@@ -20,14 +20,14 @@ go run . --source <対象ディレクトリ> [--output <出力ファイル>] [--
 
 ## 開発時の整形
 
-標準の `gofmt` を使います。開発時のGoは `go.mod` の `toolchain go1.27.1` に合わせます。Goファイルの改行は `.gitattributes` でLFに固定します。PowerShellでこのディレクトリから、変更したGoファイルだけを指定してください。引数を省くと、このモジュール直下のGoファイルだけが対象です。vendor・生成物・他ツールのファイルは対象外です。
+標準の `gofmt` を使います。開発時のGoは `go.mod` の `toolchain go1.27.1` に合わせます。Goファイルと整形スクリプトの改行は `.gitattributes` でLFに固定します。PowerShellで変更したGoファイルだけを指定してください。どのディレクトリから起動しても、ファイル名はこのモジュール直下を基準に解決します。引数を省くと、このモジュール直下のGoファイルだけが対象です。サブディレクトリ・リンク・vendor・生成物・他ツールのファイルは対象外です。
 
 ```powershell
 .\format.ps1 semantic_keys.go main_test.go
 .\format.ps1 -Check semantic_keys.go main_test.go
 ```
 
-`-Check` はファイルを書き換えず、未整形なら失敗します。CIもGo 1.27.1でこのモジュールの整形状態を確認します。
+`-Check` はファイルを書き換えず、未整形なら失敗します。CIもGo 1.27.1でこのモジュールの整形状態とGoテストを確認します。
 
 ## Documentation
 
