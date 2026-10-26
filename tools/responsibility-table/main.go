@@ -117,7 +117,22 @@ func run(args []string, stdout, stderr io.Writer) int {
 			return 1
 		}
 	}
-	overwritesSource, err := outputOverwritesGoFile(paths, outputPath)
+	if err := os.MkdirAll(filepath.Dir(outputPath), 0o755); err != nil {
+		fmt.Fprintf(stderr, "responsibility-table: create output directory: %v\n", err)
+		return 1
+	}
+	output, err := os.OpenFile(outputPath, os.O_WRONLY|os.O_CREATE, 0o644)
+	if err != nil {
+		fmt.Fprintf(stderr, "responsibility-table: write output: %v\n", err)
+		return 1
+	}
+	defer output.Close()
+	outputInfo, err := output.Stat()
+	if err != nil {
+		fmt.Fprintf(stderr, "responsibility-table: inspect output path: %v\n", err)
+		return 1
+	}
+	overwritesSource, err := outputOverwritesGoFile(paths, outputInfo)
 	if err != nil {
 		fmt.Fprintf(stderr, "responsibility-table: inspect output path: %v\n", err)
 		return 1
@@ -126,12 +141,11 @@ func run(args []string, stdout, stderr io.Writer) int {
 		fmt.Fprintln(stderr, "responsibility-table: output path must not overwrite a Go source file")
 		return 2
 	}
-
-	if err := os.MkdirAll(filepath.Dir(outputPath), 0o755); err != nil {
-		fmt.Fprintf(stderr, "responsibility-table: create output directory: %v\n", err)
+	if err := output.Truncate(0); err != nil {
+		fmt.Fprintf(stderr, "responsibility-table: write output: %v\n", err)
 		return 1
 	}
-	if err := os.WriteFile(outputPath, renderMarkdown(rows, *localeArg), 0o644); err != nil {
+	if _, err := output.Write(renderMarkdown(rows, *localeArg)); err != nil {
 		fmt.Fprintf(stderr, "responsibility-table: write output: %v\n", err)
 		return 1
 	}
@@ -139,15 +153,7 @@ func run(args []string, stdout, stderr io.Writer) int {
 	return 0
 }
 
-func outputOverwritesGoFile(sourcePaths []string, outputPath string) (bool, error) {
-	outputInfo, err := os.Stat(outputPath)
-	if errors.Is(err, os.ErrNotExist) {
-		return false, nil
-	}
-	if err != nil {
-		return false, err
-	}
-
+func outputOverwritesGoFile(sourcePaths []string, outputInfo os.FileInfo) (bool, error) {
 	for _, sourcePath := range sourcePaths {
 		sourceInfo, err := os.Stat(sourcePath)
 		if err != nil {

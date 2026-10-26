@@ -50,3 +50,10 @@ func TestExtractResponsibilityRejectsNullValue(t *testing.T) {
 		t.Fatalf("unexpected rows for null responsibility: %v", rows)
 	}
 }
+
+func TestDecodeSemanticKeysRejectsNullMapping(t *testing.T) {
+	_, err := decodeSemanticKeys([]byte(`{"SemanticKeys":null}`))
+	if err == nil || !strings.Contains(err.Error(), "SemanticKeys must map") {
+		t.Fatalf("expected SemanticKeys mapping error, got %v", err)
+	}
+}

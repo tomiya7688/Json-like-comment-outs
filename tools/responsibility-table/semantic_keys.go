@@ -63,6 +63,9 @@ func decodeSemanticKeys(data []byte) (map[string][]string, error) {
 			if err := json.Unmarshal(value, &config); err != nil {
 				return nil, fmt.Errorf("SemanticKeys must map canonical keys to alias arrays: %w", err)
 			}
+			if config == nil {
+				return nil, fmt.Errorf("SemanticKeys must map canonical keys to alias arrays")
+			}
 			break
 		}
 	}
