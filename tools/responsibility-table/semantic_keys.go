@@ -184,10 +184,79 @@ func extractResponsibility(comment string, semanticLookup map[string]string) ([]
 }
 
 func mentionsResponsibilityKey(body string, lookup map[string]string) bool {
-	lowerBody := strings.ToLower(body)
-	for key, canonical := range lookup {
-		if strings.EqualFold(canonical, "Responsibility") && strings.Contains(lowerBody, key) {
-			return true
+	depth := 0
+	arrayDepth := 0
+	expectKey := false
+	for i := 0; i < len(body); {
+		switch body[i] {
+		case '{':
+			if depth == 1 && arrayDepth == 0 && expectKey {
+				expectKey = false
+			}
+			depth++
+			if depth == 1 {
+				expectKey = true
+			}
+			i++
+		case '}':
+			if depth == 0 {
+				return false
+			}
+			depth--
+			if depth == 0 {
+				return false
+			}
+			i++
+		case '[':
+			if depth == 1 && arrayDepth == 0 && expectKey {
+				expectKey = false
+			}
+			arrayDepth++
+			i++
+		case ']':
+			if arrayDepth == 0 {
+				return false
+			}
+			arrayDepth--
+			i++
+		case ',':
+			if depth == 1 && arrayDepth == 0 {
+				expectKey = true
+			}
+			i++
+		case '"':
+			start := i
+			i++
+			for i < len(body) && body[i] != '"' {
+				if body[i] == '\\' {
+					i++
+				}
+				i++
+			}
+			if i >= len(body) {
+				return false
+			}
+			i++
+			if depth != 1 || arrayDepth != 0 || !expectKey {
+				continue
+			}
+			expectKey = false
+			var key string
+			if err := json.Unmarshal([]byte(body[start:i]), &key); err != nil {
+				continue
+			}
+			j := i
+			for j < len(body) && strings.ContainsRune(" \t\r\n", rune(body[j])) {
+				j++
+			}
+			if j < len(body) && body[j] == ':' && strings.EqualFold(lookup[normalizeSemanticKey(key)], "Responsibility") {
+				return true
+			}
+		default:
+			if depth == 1 && arrayDepth == 0 && expectKey && !strings.ContainsRune(" \t\r\n", rune(body[i])) {
+				expectKey = false
+			}
+			i++
 		}
 	}
 	return false

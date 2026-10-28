@@ -58,6 +58,48 @@ func TestDecodeSemanticKeysRejectsNullMapping(t *testing.T) {
 	}
 }
 
+func TestExtractResponsibilityMalformedCommentCandidate(t *testing.T) {
+	lookup, err := buildSemanticKeyLookup(defaultSemanticKeys())
+	if err != nil {
+		t.Fatal(err)
+	}
+	tests := []struct {
+		name      string
+		comment   string
+		candidate bool
+	}{
+		{name: "unknown substring", comment: `{"NotResponsibility":}`, candidate: false},
+		{name: "nested key", comment: `{"Unknown":{"Responsibility":}}`, candidate: false},
+		{name: "known key", comment: `{"Responsibility":}`, candidate: true},
+		{name: "known alias", comment: `{"役割":}`, candidate: true},
+		{name: "escaped key", comment: `{"Respons\u0069bility":}`, candidate: true},
+		{name: "braces in value", comment: `{"Unknown":"{","Responsibility":}`, candidate: true},
+		{name: "value is not key", comment: `{"Unknown":"Responsibility":}`, candidate: false},
+		{name: "array item is not key", comment: `{"Unknown":[0,"Responsibility":]}`, candidate: false},
+		{name: "quoted substring", comment: `{"Not\"Responsibility":}`, candidate: false},
+		{name: "space before colon", comment: `{"Responsibility" :}`, candidate: true},
+		{name: "different case", comment: `{"RESPONSIBILITY":}`, candidate: true},
+		{name: "no object start", comment: `"Responsibility":}`, candidate: false},
+		{name: "extra closing brace", comment: `{} } {"Unknown":{"Responsibility":}}`, candidate: false},
+		{name: "second object", comment: `{"Unknown":1} {"Responsibility":}`, candidate: false},
+		{name: "nested then known", comment: `{"Unknown":{"X":1},"Responsibility":}`, candidate: true},
+		{name: "array then known", comment: `{"Unknown":[1,2],"Responsibility":}`, candidate: true},
+		{name: "missing comma", comment: `{"Unknown":1 "Responsibility":}`, candidate: false},
+		{name: "array before key", comment: `{[]"Responsibility":}`, candidate: false},
+		{name: "number before key", comment: `{0"Responsibility":}`, candidate: false},
+		{name: "array after comma", comment: `{"Unknown":1,[]"Responsibility":}`, candidate: false},
+		{name: "unquoted key", comment: `{Responsibility:}`, candidate: false},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			rows, candidate, err := extractResponsibility(test.comment, lookup)
+			if candidate != test.candidate || (err != nil) != test.candidate || len(rows) != 0 {
+				t.Fatalf("rows=%v candidate=%v err=%v, want candidate=%v", rows, candidate, err, test.candidate)
+			}
+		})
+	}
+}
+
 func TestRunRejectsSymlinkOutputWithoutChangingTarget(t *testing.T) {
 	sourceRoot := t.TempDir()
 	target := filepath.Join(t.TempDir(), "notes.md")
