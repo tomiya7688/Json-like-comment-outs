@@ -42,3 +42,23 @@ jobs:
               print("\n".join(failures), file=sys.stderr)
               sys.exit(1)
           PY
+
+  go-format:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: tools/responsibility-table/go.mod
+          cache: false
+      - name: Check Responsibility Table Go formatting
+        run: |
+          unformatted="$(gofmt -l tools/responsibility-table/*.go)"
+          if [ -n "$unformatted" ]; then
+            printf '%s\n' "$unformatted"
+            exit 1
+          fi
+      - name: Test Responsibility Table
+        working-directory: tools/responsibility-table
+        run: go test ./...
