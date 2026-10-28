@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"html"
 	"strings"
 )
 
@@ -23,8 +24,10 @@ func renderMarkdown(rows []tableRow, locale string) []byte {
 }
 
 func escapeMarkdownCell(value string) string {
+	value = html.EscapeString(value)
 	value = strings.ReplaceAll(value, "\\", "\\\\")
 	value = strings.ReplaceAll(value, "|", "\\|")
+	value = strings.ReplaceAll(value, "`", "\\`")
 	value = strings.ReplaceAll(value, "\r\n", " ")
 	value = strings.ReplaceAll(value, "\r", " ")
 	value = strings.ReplaceAll(value, "\n", " ")

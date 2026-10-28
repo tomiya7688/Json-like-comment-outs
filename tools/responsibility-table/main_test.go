@@ -37,6 +37,16 @@ func TestRunRejectsOutputHardLinkedToGoSource(t *testing.T) {
 	}
 }
 
+func TestRenderMarkdownEscapesHTMLInBothCells(t *testing.T) {
+	rows := []tableRow{{name: `<img src=x onerror="alert(1)">`, responsibility: "&lt;script&gt; `<b>` | C:\\temp"}}
+	got := string(renderMarkdown(rows, "en"))
+	want := "| Name | Responsibility |\n| --- | --- |\n" +
+		"| &lt;img src=x onerror=&#34;alert(1)&#34;&gt; | &amp;lt;script&amp;gt; \\`&lt;b&gt;\\` \\| C:\\\\temp |\n"
+	if got != want {
+		t.Fatalf("renderMarkdown() = %q, want %q", got, want)
+	}
+}
+
 func TestExtractResponsibilityRejectsNullValue(t *testing.T) {
 	lookup, err := buildSemanticKeyLookup(defaultSemanticKeys())
 	if err != nil {
