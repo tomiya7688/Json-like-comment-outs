@@ -10,36 +10,39 @@ import (
 	"strings"
 )
 
-func loadSemanticKeyLookup(sourceRoot, explicitPath string) (map[string]string, error) {
+func loadSemanticKeyLookup(sourceRoot, explicitPath string) (map[string]string, string, error) {
 	if explicitPath == "" {
 		defaultPath := filepath.Join(sourceRoot, ".json-like-comment-outs", "semantic-keys.json")
 		data, err := os.ReadFile(defaultPath)
 		if os.IsNotExist(err) {
-			return buildSemanticKeyLookup(defaultSemanticKeys())
+			lookup, lookupErr := buildSemanticKeyLookup(defaultSemanticKeys())
+			return lookup, "", lookupErr
 		}
 		if err != nil {
-			return nil, err
+			return nil, "", err
 		}
 		config, err := decodeSemanticKeys(data)
 		if err != nil {
-			return nil, fmt.Errorf("%s: %w", defaultPath, err)
+			return nil, "", fmt.Errorf("%s: %w", defaultPath, err)
 		}
-		return buildSemanticKeyLookup(config)
+		lookup, lookupErr := buildSemanticKeyLookup(config)
+		return lookup, defaultPath, lookupErr
 	}
 
 	configPath, err := filepath.Abs(explicitPath)
 	if err != nil {
-		return nil, err
+		return nil, "", err
 	}
 	data, err := os.ReadFile(configPath)
 	if err != nil {
-		return nil, fmt.Errorf("%s: %w", configPath, err)
+		return nil, "", fmt.Errorf("%s: %w", configPath, err)
 	}
 	config, err := decodeSemanticKeys(data)
 	if err != nil {
-		return nil, fmt.Errorf("%s: %w", configPath, err)
+		return nil, "", fmt.Errorf("%s: %w", configPath, err)
 	}
-	return buildSemanticKeyLookup(config)
+	lookup, lookupErr := buildSemanticKeyLookup(config)
+	return lookup, configPath, lookupErr
 }
 
 func defaultSemanticKeys() map[string][]string {

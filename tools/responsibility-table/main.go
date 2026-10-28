@@ -74,7 +74,7 @@ func run(args []string, stdout, stderr io.Writer) int {
 		fmt.Fprintf(stderr, "responsibility-table: scan source directory: %v\n", err)
 		return 1
 	}
-	semanticLookup, err := loadSemanticKeyLookup(sourceRoot, *semanticKeysArg)
+	semanticLookup, configPath, err := loadSemanticKeyLookup(sourceRoot, *semanticKeysArg)
 	if err != nil {
 		fmt.Fprintf(stderr, "responsibility-table: load SemanticKeys: %v\n", err)
 		return 1
@@ -121,31 +121,77 @@ func run(args []string, stdout, stderr io.Writer) int {
 		fmt.Fprintf(stderr, "responsibility-table: create output directory: %v\n", err)
 		return 1
 	}
-	output, err := os.OpenFile(outputPath, os.O_WRONLY|os.O_CREATE, 0o644)
+	var mode os.FileMode
+	outputInfo, err := os.Lstat(outputPath)
+	if err == nil {
+		if outputInfo.Mode()&os.ModeSymlink != 0 {
+			fmt.Fprintln(stderr, "responsibility-table: output path must not be a symbolic link")
+			return 2
+		}
+		if !outputInfo.Mode().IsRegular() {
+			fmt.Fprintln(stderr, "responsibility-table: output path must be a regular file")
+			return 2
+		}
+		overwritesSource, inspectErr := outputOverwritesGoFile(paths, outputInfo)
+		if inspectErr != nil {
+			fmt.Fprintf(stderr, "responsibility-table: inspect output path: %v\n", inspectErr)
+			return 1
+		}
+		if overwritesSource {
+			fmt.Fprintln(stderr, "responsibility-table: output path must not overwrite a Go source file")
+			return 2
+		}
+		mode = outputInfo.Mode().Perm()
+	} else if !errors.Is(err, os.ErrNotExist) {
+		fmt.Fprintf(stderr, "responsibility-table: inspect output path: %v\n", err)
+		return 1
+	}
+	if configPath != "" {
+		configInfo, statErr := os.Stat(configPath)
+		if statErr != nil {
+			fmt.Fprintf(stderr, "responsibility-table: inspect SemanticKeys path: %v\n", statErr)
+			return 1
+		}
+		if outputInfo != nil && os.SameFile(outputInfo, configInfo) {
+			fmt.Fprintln(stderr, "responsibility-table: output path must not overwrite the SemanticKeys configuration")
+			return 2
+		}
+	}
+	if outputInfo != nil {
+		writable, openErr := os.OpenFile(outputPath, os.O_WRONLY, 0)
+		if openErr != nil {
+			fmt.Fprintf(stderr, "responsibility-table: write output: %v\n", openErr)
+			return 1
+		}
+		if err := writable.Close(); err != nil {
+			fmt.Fprintf(stderr, "responsibility-table: write output: %v\n", err)
+			return 1
+		}
+	}
+	output, err := os.CreateTemp(filepath.Dir(outputPath), ".responsibility-table-*.tmp")
 	if err != nil {
 		fmt.Fprintf(stderr, "responsibility-table: write output: %v\n", err)
 		return 1
 	}
-	defer output.Close()
-	outputInfo, err := output.Stat()
-	if err != nil {
-		fmt.Fprintf(stderr, "responsibility-table: inspect output path: %v\n", err)
+	defer os.Remove(output.Name())
+	if outputInfo != nil {
+		if err := output.Chmod(mode); err != nil {
+			output.Close()
+			fmt.Fprintf(stderr, "responsibility-table: write output: %v\n", err)
+			return 1
+		}
+	}
+	_, writeErr := output.Write(renderMarkdown(rows, *localeArg))
+	var syncErr error
+	if writeErr == nil {
+		syncErr = output.Sync()
+	}
+	closeErr := output.Close()
+	if writeErr != nil || syncErr != nil || closeErr != nil {
+		fmt.Fprintf(stderr, "responsibility-table: write output: %v\n", errors.Join(writeErr, syncErr, closeErr))
 		return 1
 	}
-	overwritesSource, err := outputOverwritesGoFile(paths, outputInfo)
-	if err != nil {
-		fmt.Fprintf(stderr, "responsibility-table: inspect output path: %v\n", err)
-		return 1
-	}
-	if overwritesSource {
-		fmt.Fprintln(stderr, "responsibility-table: output path must not overwrite a Go source file")
-		return 2
-	}
-	if err := output.Truncate(0); err != nil {
-		fmt.Fprintf(stderr, "responsibility-table: write output: %v\n", err)
-		return 1
-	}
-	if _, err := output.Write(renderMarkdown(rows, *localeArg)); err != nil {
+	if err := os.Rename(output.Name(), outputPath); err != nil {
 		fmt.Fprintf(stderr, "responsibility-table: write output: %v\n", err)
 		return 1
 	}

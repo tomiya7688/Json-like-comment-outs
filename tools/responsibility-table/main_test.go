@@ -57,3 +57,114 @@ func TestDecodeSemanticKeysRejectsNullMapping(t *testing.T) {
 		t.Fatalf("expected SemanticKeys mapping error, got %v", err)
 	}
 }
+
+func TestRunRejectsSymlinkOutputWithoutChangingTarget(t *testing.T) {
+	sourceRoot := t.TempDir()
+	target := filepath.Join(t.TempDir(), "notes.md")
+	before := []byte("keep this file\n")
+	if err := os.WriteFile(target, before, 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Symlink(target, filepath.Join(sourceRoot, "responsibility-table.md")); err != nil {
+		t.Skipf("symbolic links unavailable: %v", err)
+	}
+	var stdout, stderr bytes.Buffer
+	if code := run([]string{"--source", sourceRoot}, &stdout, &stderr); code != 2 {
+		t.Fatalf("run() returned %d, want 2; stderr: %s", code, stderr.String())
+	}
+	actual, err := os.ReadFile(target)
+	if err != nil || !bytes.Equal(actual, before) {
+		t.Fatalf("symlink target changed: %q, %v", actual, err)
+	}
+	if err := os.Remove(filepath.Join(sourceRoot, "responsibility-table.md")); err != nil {
+		t.Fatal(err)
+	}
+	missingTarget := filepath.Join(t.TempDir(), "missing.md")
+	if err := os.Symlink(missingTarget, filepath.Join(sourceRoot, "responsibility-table.md")); err != nil {
+		t.Fatal(err)
+	}
+	stdout.Reset()
+	stderr.Reset()
+	if code := run([]string{"--source", sourceRoot}, &stdout, &stderr); code != 2 {
+		t.Fatalf("dangling symlink: run() returned %d, want 2; stderr: %s", code, stderr.String())
+	}
+	if _, err := os.Lstat(missingTarget); !os.IsNotExist(err) {
+		t.Fatalf("dangling symlink target was created: %v", err)
+	}
+}
+
+func TestRunRejectsOutputOverSemanticKeys(t *testing.T) {
+	sourceRoot := t.TempDir()
+	configPath := filepath.Join(sourceRoot, "semantic-keys.json")
+	before := []byte(`{"SemanticKeys":{"Responsibility":[]}}`)
+	if err := os.WriteFile(configPath, before, 0o644); err != nil {
+		t.Fatal(err)
+	}
+	var stdout, stderr bytes.Buffer
+	if code := run([]string{"--source", sourceRoot, "--semantic-keys", configPath, "--output", configPath}, &stdout, &stderr); code != 2 {
+		t.Fatalf("run() returned %d, want 2; stderr: %s", code, stderr.String())
+	}
+	actual, err := os.ReadFile(configPath)
+	if err != nil || !bytes.Equal(actual, before) {
+		t.Fatalf("SemanticKeys configuration changed: %q, %v", actual, err)
+	}
+	defaultDir := filepath.Join(sourceRoot, ".json-like-comment-outs")
+	if err := os.MkdirAll(defaultDir, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	defaultPath := filepath.Join(defaultDir, "semantic-keys.json")
+	if err := os.WriteFile(defaultPath, before, 0o644); err != nil {
+		t.Fatal(err)
+	}
+	stdout.Reset()
+	stderr.Reset()
+	if code := run([]string{"--source", sourceRoot, "--output", defaultPath}, &stdout, &stderr); code != 2 {
+		t.Fatalf("default SemanticKeys: run() returned %d, want 2; stderr: %s", code, stderr.String())
+	}
+	actual, err = os.ReadFile(defaultPath)
+	if err != nil || !bytes.Equal(actual, before) {
+		t.Fatalf("default SemanticKeys configuration changed: %q, %v", actual, err)
+	}
+}
+
+func TestRunReplacesExistingTable(t *testing.T) {
+	sourceRoot := t.TempDir()
+	outputPath := filepath.Join(sourceRoot, "responsibility-table.md")
+	if err := os.WriteFile(outputPath, []byte("old table\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	var stdout, stderr bytes.Buffer
+	if code := run([]string{"--source", sourceRoot}, &stdout, &stderr); code != 0 {
+		t.Fatalf("run() returned %d, want 0; stderr: %s", code, stderr.String())
+	}
+	actual, err := os.ReadFile(outputPath)
+	if err != nil || bytes.Contains(actual, []byte("old table")) || !bytes.Contains(actual, []byte("名前")) {
+		t.Fatalf("table was not replaced: %q, %v", actual, err)
+	}
+}
+
+func TestRunPreservesReadOnlyExistingTable(t *testing.T) {
+	sourceRoot := t.TempDir()
+	outputPath := filepath.Join(sourceRoot, "responsibility-table.md")
+	before := []byte("old table\n")
+	if err := os.WriteFile(outputPath, before, 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Chmod(outputPath, 0o444); err != nil {
+		t.Skipf("read-only files unavailable: %v", err)
+	}
+	defer os.Chmod(outputPath, 0o644)
+	probe, err := os.OpenFile(outputPath, os.O_WRONLY, 0)
+	if err == nil {
+		probe.Close()
+		t.Skip("write-only open is permitted for this user")
+	}
+	var stdout, stderr bytes.Buffer
+	if code := run([]string{"--source", sourceRoot}, &stdout, &stderr); code != 1 {
+		t.Fatalf("run() returned %d, want 1; stderr: %s", code, stderr.String())
+	}
+	actual, err := os.ReadFile(outputPath)
+	if err != nil || !bytes.Equal(actual, before) {
+		t.Fatalf("read-only table changed: %q, %v", actual, err)
+	}
+}
